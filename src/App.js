@@ -1,25 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
+import Calculator from './calculator'
+import { Provider } from './context'
+import { themeStyles } from './theme'
 import './App.css';
 
+const handleMode = ({ mode , setMode }) => {
+  const value = mode === 'Scientific'? 'Normal' : 'Scientific'
+  setMode(value)
+}
+
 function App() {
+  const [mode, setMode] = useState('Scientific')
+  const [theme, setTheme] = useState('light')
+  const backgroundColor = themeStyles[theme].backgroundColor
+  const color = themeStyles[theme].textColor
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Provider value={theme}>
+      <div
+        className="App"
+        style={{ backgroundColor, color }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+        <div className="top-container">
+          <div
+            className="mode scientific-mode"
+            onClick={() => handleMode({ mode , setMode })}
+            >
+            { `${mode} Mode` }
+          </div>
+          <div className="mode" onClick={() => setTheme('light')}>
+            Light Theme
+          </div>
+          <div className="mode" onClick={() => setTheme('dark')}>
+            Dark Theme
+          </div>
+        </div>
+        <Calculator mode={ mode } />
+      </div>
+    </Provider>
   );
 }
 
